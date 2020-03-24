@@ -1,4 +1,4 @@
-# py_exceltools
+# genCfgs
     python3 基于openpyxl的excel转换工具。支持xlsx文件转换为erlang,elixir,lua,json,xml,python等配置文件。
     关于openpyxl库：https://pypi.python.org/pypi/openpyxl。
 
