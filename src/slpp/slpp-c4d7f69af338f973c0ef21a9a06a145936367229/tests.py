@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from slpp import slpp as lua
+from src.slpp import slpp as lua
 
 """
 Tests for slpp

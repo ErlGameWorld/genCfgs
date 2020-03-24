@@ -427,14 +427,14 @@ class ExcelDoc:
         return sheeter
 
     def decode(self,srv_path,clt_path,srv_writer,clt_writer):
-        color_print.printYellow( "    start covert: %s \n" % self.file.ljust(44, "*") )
+        color_print.printYellow("    start covert: %s \n" % self.file.ljust(44, "*"))
         base_name = os.path.splitext( self.file )[0]
         wb = openpyxl.load_workbook( self.abspath )
 
         for wb_sheet in wb.worksheets:
             Sheeter = self.need_decode( wb_sheet )
             if None == Sheeter :
-                color_print.printPink( "        covert skip........... sheet name -> %s\n" % wb_sheet.title )
+                color_print.printPink("        covert skip........... sheet name -> %s\n" % wb_sheet.title)
                 continue
 
             sheet = Sheeter( base_name,wb_sheet,srv_writer,clt_writer )
