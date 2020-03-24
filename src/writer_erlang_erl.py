@@ -112,8 +112,8 @@ class ErlangerlWriter(Writer):
 
                 value_list.append( oneval )
 
-            value_list_str = "    ,".join(value_list)
-            end_str = "".join( [key, value_list_str, "    };\n\n"] )
+            value_list_str = "    , ".join(value_list)
+            end_str = "".join( [key, value_list_str, "};\n\n"] )
 
             list_text_list.append( end_str )
 
