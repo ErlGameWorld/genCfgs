@@ -5,7 +5,7 @@ __pycache__/
 
 # C extensions
 *.so
-
+.idea
 # yongzhong office temp file
 $*
 
@@ -107,6 +107,4 @@ ENV/
 
 # mypy
 .mypy_cache/
-
-config_excel/
 

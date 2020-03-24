@@ -65,7 +65,8 @@ class ErlangerlWriter(Writer):
 
             val_type = type( lk )
             if str == val_type :
-                lk = lk.replace("\"", "\'")
+                lk = lk.replace("<<\"", "\'")
+                lk = lk.replace("\">>", "\'")
 
             key = "".join( ["get(",lk,") ->\n"] )
 
@@ -104,7 +105,8 @@ class ErlangerlWriter(Writer):
 
                 val_type = type( lk )
                 if str == val_type :
-                    lk = lk.replace("\"", "\'")
+                    lk = lk.replace("<<\"", "\'")
+                    lk = lk.replace("\">>", "\'")
 
                 oneval = "".join( [lk, " = ", lv , "\n"] )
 
@@ -199,7 +201,9 @@ class ErlangerlWriter(Writer):
 
             val_type = type( lk )
             if str == val_type :
-                lk = lk.replace("\"", "\'")
+                lk = lk.replace("<<\"", "\'")
+                lk = lk.replace("\">>", "\'")
+
             key = "".join( [lk," => "] )
             val = "".join( [key, lv] )
             dict_ctx_list.append(val)
@@ -243,7 +247,7 @@ class ErlangerlWriter(Writer):
                 return False,str( int(value) )
             return False,str( value )
         elif str == val_type or unicode == val_type:
-            return False, "".join(["\"",value,"\""])
+            return False, "".join(["<<\"",value,"\">>"])
         elif tuple == val_type :
             return self.tuple_to_erlang(value,indent)
         elif dict == val_type :

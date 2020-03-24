@@ -67,8 +67,8 @@ class ErlanghrlWriter(Writer):
 
             list_text_list.append( val )
 
-        list_str = "    ,".join( list_text_list )
-        list_str = list_str + "    })."
+        list_str = "    , ".join( list_text_list )
+        list_str = list_str + "})."
         return False, list_str
 
     # 转换为文本数据 之前解析出来的excel数据存放方式存在LIST(array格式)和DICT(object格式)两种类型
