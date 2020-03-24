@@ -49,7 +49,7 @@
 ## 打包exe
     部署时，可以将python打包成exe。建议使用pyinstaller。
     pip install pyinstaller
-    pyinstaller -F -c genCfgs.py
+    cd src && pyinstaller -F -c genCfgs.py
 
 ## 关于文件命名
 ### excel文件名命名格式
