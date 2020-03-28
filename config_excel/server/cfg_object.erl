@@ -4,7 +4,7 @@
 
 -module(cfg_object).
 
--compile(export_all).
+-compile([export_all, nowarn_export_all]).
 
 %% 开放等级
 get('open_level') ->
@@ -24,11 +24,11 @@ get('act_id') ->
 
 %% 开始时间
 get('open') ->
-    <<"18:00:0">>;
+    "18:00:0";
 
 %% 错误信息
 get(10000) ->
-    <<"前面字段为errorID,这里是错误描述，是的object配置的server,client字段名还支持数字作为key(但是转出格式为xml和jsonarray时就不支持了)">>;
+    "前面字段为errorID,这里是错误描述，是的object配置的server,client字段名还支持数字作为key(但是转出格式为xml和jsonarray时就不支持了)";
 
 %% 奖励1
 get('award1') ->
@@ -44,7 +44,7 @@ get('award3') ->
 
 %% 奖励4
 get('award4') ->
-    #{'rr' => [1001, 20], 'ff' => [3006, 99], 'aa' => [7003, 1], 'test' => <<"这就是一个测试">>};
+    #{'rr' => [1001, 20], 'ff' => [3006, 99], 'aa' => [7003, 1], 'test' => "这就是一个测试"};
 
 %% 奖励5
 get('award5') ->

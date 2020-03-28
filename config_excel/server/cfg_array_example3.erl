@@ -4,11 +4,11 @@
 
 -module(cfg_array_example3).
 
--compile(export_all).
+-compile([export_all, nowarn_export_all]).
 
 %% 演示
 get('level') ->
-    <<"啦啦啦！！！">>;
+    "啦啦啦！！！";
 
 get(_) ->
     undefined.

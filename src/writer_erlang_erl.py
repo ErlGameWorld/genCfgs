@@ -56,7 +56,7 @@ class ErlangerlWriter(Writer):
 
     def dict_to_text(self, value, indent) :
         dict_text_list = []
-        dict_text_list.append("-compile(export_all).\n\n")
+        dict_text_list.append("-compile([export_all, nowarn_export_all]).\n\n")
         for k in ( value ) :
             k_indent,lk = self.to_target_lang( k,indent )
             is_indent,lv = self.to_target_lang( value[k],indent + 1 )
@@ -65,8 +65,7 @@ class ErlangerlWriter(Writer):
 
             val_type = type( lk )
             if str == val_type :
-                lk = lk.replace("<<\"", "\'")
-                lk = lk.replace("\">>", "\'")
+                lk = lk.replace("\"", "\'")
 
             key = "".join( ["get(",lk,") ->\n"] )
 
@@ -80,7 +79,7 @@ class ErlangerlWriter(Writer):
 
     def list_to_text(self, value, indent):
         list_text_list = []
-        val = "-include(\"" + self.base_name + ".hrl\").\n" + "-compile(export_all).\n\n"
+        val = "-include(\"" + self.base_name + ".hrl\").\n" + "-compile([export_all, nowarn_export_all]).\n\n"
         list_text_list.append(val)
         all_key_list = []
         # 生成 get() 函数
@@ -105,8 +104,7 @@ class ErlangerlWriter(Writer):
 
                 val_type = type( lk )
                 if str == val_type :
-                    lk = lk.replace("<<\"", "\'")
-                    lk = lk.replace("\">>", "\'")
+                    lk = lk.replace("\"", "\'")
 
                 oneval = "".join( [lk, " = ", lv , "\n"] )
 
@@ -131,8 +129,8 @@ class ErlangerlWriter(Writer):
         for i, ival in enumerate(all_key_list) :
             oneval = '{' + ", ".join(ival) + '}\n'
             get_all_fun.append(oneval)
-        value_list_str = "    ,".join(get_all_fun)
-        start_str = 'get_all() ->\n    [\n    '
+        value_list_str = "    , ".join(get_all_fun)
+        start_str = 'getList() ->\n    [\n    '
         end_str = "".join( [start_str, value_list_str, "    ].\n\n"] )
 
         list_text_list.append( end_str )
@@ -143,7 +141,7 @@ class ErlangerlWriter(Writer):
         for key in self.keys_list :
             keyindex = self.keys_list[key]
             if keyindex == 1 :
-                list_text_list.append( 'get_list() ->\n    get_all().\n\n')
+                "skip"
             elif keyindex <= keys_len :
                 get_tem_dict = {}
                 underline_list = []
@@ -170,10 +168,10 @@ class ErlangerlWriter(Writer):
                     for l, lval in enumerate(valuelist) :
                         oneval = '{' + ", ".join(lval) + '}\n'
                         value_tem_list.append(oneval)
-                    start = 'get_list' + onekey + ' ->\n    [\n    '
-                    val = "".join( [start, "    ,".join(value_tem_list), "    ];\n\n"] )
+                    start = 'getList' + onekey + ' ->\n    [\n    '
+                    val = "".join( [start, "    , ".join(value_tem_list), "    ];\n\n"] )
                     get_list_fun.append(val)
-                no_match_str = "".join('get_list(' + ", ".join(underline_list) + ') ->\n    [].\n\n')
+                no_match_str = "".join('getList(' + ", ".join(underline_list) + ') ->\n    [].\n\n')
                 get_list_fun.append(no_match_str)
 
 
@@ -201,9 +199,7 @@ class ErlangerlWriter(Writer):
 
             val_type = type( lk )
             if str == val_type :
-                lk = lk.replace("<<\"", "\'")
-                lk = lk.replace("\">>", "\'")
-
+                lk = lk.replace("\"", "\'")
             key = "".join( [lk," => "] )
             val = "".join( [key, lv] )
             dict_ctx_list.append(val)
@@ -247,7 +243,7 @@ class ErlangerlWriter(Writer):
                 return False,str( int(value) )
             return False,str( value )
         elif str == val_type or unicode == val_type:
-            return False, "".join(["<<\"",value,"\">>"])
+            return False, "".join(["\"",value,"\""])
         elif tuple == val_type :
             return self.tuple_to_erlang(value,indent)
         elif dict == val_type :
