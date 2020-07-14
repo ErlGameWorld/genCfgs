@@ -301,9 +301,6 @@ class ArraySheet(Sheet):
         for row_idx in range( ACLT_ROW + 1,self.wb_sheet.max_row + 1 ):
             srv_row,clt_row = self.decode_row( row_idx )
 
-            if row_idx > 57 :
-                break
-
             # 不为空才追加
             if any( srv_row ) :
                 self.srv_ctx.append( srv_row )
@@ -376,9 +373,6 @@ class ObjectSheet(Sheet):
     def decode_ctx(self):
         for row_idx in range( OFLG_ROW + 1,len( self.types ) + OFLG_ROW + 1 ):
             value = self.decode_cell( row_idx )
-
-            if row_idx > 54 :
-                break
 
             if None == value :
                 continue
