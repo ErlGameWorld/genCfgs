@@ -25,11 +25,18 @@ OCLT_COL = 4  # client  column 客户端
 OCTX_COL = 5  # content column 内容所在列
 OFLG_ROW = 2  # flag  object模式下  server client所在行
 
+SHEET_FLAG_ROW = 2      # 2列1行表示是array 还是object 或者是不用导出的表
+SHEET_FLAG_COL = 1      # 2列1行表示是array 还是object 或者是不用导出的表
+
+# 导出服务器/客户端配置标识
 SRV_FLAG = "server"
 CLT_FLAG = "client"
 
-SHEET_FLAG_ROW = 2      # 2列1行表示是array 还是object 或者是不用导出的表
-SHEET_FLAG_COL = 1      # 2列1行表示是array 还是object 或者是不用导出的表
+# array数组模式下 是否导出 服务器/客户端 get_list()函数
+ALIST_ROW = 3           # 是否导出get_list()函数的设置行
+SRV_LIST = "slist"
+CLT_LIST = "clist"
+
 
 # 用于标识表的类型 不是这两种就不会导出数据
 ARRAY_FLAG  = "array"   # 标识表的是array类型的表
