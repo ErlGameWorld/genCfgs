@@ -10,29 +10,26 @@ import color_print
 
 from slpp.slpp import slpp as lua
 
-# array数组模式下，各个栏的分布
-# 1、2行是文档注释，不导出
-ACMT_ROW = 3  # comment row 注释
-ATPE_ROW = 4  # type    row 类型
-ASRV_ROW = 5  # server  row 服务器
-ACLT_ROW = 6  # client  row 客户端
+# array数组模式下，各个栏的分布       第一行行是文档注释，不导出
+ACMT_ROW = 2  # comment row 注释
+ATPE_ROW = 3  # type    row 类型
+ASRV_ROW = 4  # server  row 服务器
+ACLT_ROW = 5  # client  row 客户端
 AKEY_COL = 1  # key  column key所在列
 
-# object(kv)模式下，各个栏的分布
+# object(kv)模式下，各个栏的分布     第一行是文档注释，不导出
 OCMT_COL = 1  # comment column 注释
 OTPE_COL = 2  # type    column 类型
 OSRV_COL = 3  # server  column 服务器
 OCLT_COL = 4  # client  column 客户端
 OCTX_COL = 5  # content column 内容所在列
-
-# 1、2行是文档注释，不导出
-OFLG_ROW = 3  # flag    row    server client所在行
+OFLG_ROW = 2  # flag  object模式下  server client所在行
 
 SRV_FLAG = "server"
 CLT_FLAG = "client"
 
-SHEET_FLAG_ROW = 3      # 3列1行表示是array 还是object 或者是不用导出的表
-SHEET_FLAG_COL = 1      # 3列1行表示是array 还是object 或者是不用导出的表
+SHEET_FLAG_ROW = 2      # 2列1行表示是array 还是object 或者是不用导出的表
+SHEET_FLAG_COL = 1      # 2列1行表示是array 还是object 或者是不用导出的表
 
 # 用于标识表的类型 不是这两种就不会导出数据
 ARRAY_FLAG  = "array"   # 标识表的是array类型的表
