@@ -33,7 +33,8 @@ SRV_FLAG = "server"
 CLT_FLAG = "client"
 
 # array数组模式下 是否导出 服务器/客户端 get_list()函数
-ALIST_ROW = 3           # 是否导出get_list()函数的设置行
+ALIST_ROW = 3  # 是否导出get_list()函数的设置行
+ALIST_COL = 1
 SRV_LIST = "slist"
 CLT_LIST = "clist"
 
@@ -112,7 +113,7 @@ class ValueConverter(object):
 
 class Sheet(object):
 
-    def __init__(self,base_name,wb_sheet,srv_writer,clt_writer):
+    def __init__(self, base_name, wb_sheet, srv_writer, clt_writer, srv_is_list, clt_is_list):
 
         self.types  = []        # 记录各列字段的类型
 
@@ -127,6 +128,8 @@ class Sheet(object):
         self.srv_keys = {}      # 服务器key
         self.clt_keys = {}      # 客户端key
 
+        self.srv_is_list = srv_is_list  # 客户端是否导致get_list() 列表函数
+        self.clt_is_list = clt_is_list  # 客户端是否导致get_list() 列表函数
 
         self.converter = ValueConverter()
 
@@ -173,7 +176,7 @@ class Sheet(object):
         return True
 
     # 写入配置到文件
-    def write_one_file(self,ctx,base_path,writer, keys_list, comment_text):
+    def write_one_file(self, ctx, base_path, writer, keys_list, comment_text, is_list):
         # 有些配置可能只导出客户端或只导出服务器
         if not any(ctx) :
             return
@@ -184,8 +187,8 @@ class Sheet(object):
             if 1 == len(match_list):
                 write_file_name = write_file_name + '_' + match_list[0]
 
-        wt = writer(self.base_name,self.wb_sheet.title, write_file_name, keys_list, comment_text)
-        ctx = wt.context( ctx )
+        wt = writer(self.base_name, self.wb_sheet.title, write_file_name, keys_list, comment_text, is_list)
+        ctx = wt.context(ctx)
         suffix = wt.suffix()
         if None != ctx :
             path = base_path + write_file_name + suffix
@@ -196,22 +199,22 @@ class Sheet(object):
             file.close()
 
     # 分别写入到服务端、客户端的配置文件
-    def write_files(self,srv_path,clt_path):
-        if None != srv_path and None != self.srv_writer :
-            self.write_one_file( self.srv_ctx,srv_path,self.srv_writer, self.srv_keys, self.srv_comment)
-        if None != clt_path and None != self.clt_writer :
-            self.write_one_file( self.clt_ctx,clt_path,self.clt_writer, self.clt_keys, self.clt_comment )
+    def write_files(self, srv_path, clt_path):
+        if None != srv_path and None != self.srv_writer:
+            self.write_one_file(self.srv_ctx, srv_path, self.srv_writer, self.srv_keys, self.srv_comment, self.srv_is_list)
+        if None != clt_path and None != self.clt_writer:
+            self.write_one_file(self.clt_ctx, clt_path, self.clt_writer, self.clt_keys, self.clt_comment, self.clt_is_list)
 
 # 导出数组类型配置，A1格子的内容有array标识
 class ArraySheet(Sheet):
 
-    def __init__(self,base_name,wb_sheet,srv_writer,clt_writer):
+    def __init__(self, base_name, wb_sheet, srv_writer, clt_writer, srv_is_list, clt_is_list):
         # 记录导出各行的内容
         self.srv_ctx = []
         self.clt_ctx = []
 
-        super( ArraySheet, self ).__init__(
-            base_name,wb_sheet,srv_writer,clt_writer )
+        super(ArraySheet, self).__init__(
+            base_name, wb_sheet, srv_writer, clt_writer, srv_is_list, clt_is_list)
 
     # 解析各列的类型(string、number...)
     def decode_type(self):
@@ -317,13 +320,13 @@ class ArraySheet(Sheet):
 # 导出object类型的结构，A1格子有object标识
 class ObjectSheet(Sheet):
 
-    def __init__(self,base_name,wb_sheet,srv_writer,clt_writer):
+    def __init__(self, base_name, wb_sheet, srv_writer, clt_writer, srv_is_list, clt_is_list):
         # 记录导出各行的内容
         self.srv_ctx = {}
         self.clt_ctx = {}
 
-        super( ObjectSheet, self ).__init__(
-            base_name,wb_sheet,srv_writer,clt_writer )
+        super(ObjectSheet, self).__init__(
+            base_name, wb_sheet, srv_writer, clt_writer, srv_is_list, clt_is_list)
 
     # 解析各字段的类型
     def decode_type(self):
@@ -405,24 +408,34 @@ class ExcelDoc:
         sheeter = None
         srv_value = None
         clt_value = None
-        if ARRAY_FLAG == sheet_val :
+        srv_is_list = False
+        clt_is_list = False
+        if ARRAY_FLAG == sheet_val:
             if wb_sheet.max_row <= ACLT_ROW or wb_sheet.max_column <= AKEY_COL:
                 return None
 
             sheeter = ArraySheet
-            srv_value = wb_sheet.cell( row = ASRV_ROW, column = AKEY_COL ).value
-            clt_value = wb_sheet.cell( row = ACLT_ROW, column = AKEY_COL ).value
-        elif OBJECT_FLAG == sheet_val :
+            srv_value = wb_sheet.cell(row=ASRV_ROW, column=AKEY_COL).value
+            clt_value = wb_sheet.cell(row=ACLT_ROW, column=AKEY_COL).value
+
+            is_list_val = wb_sheet.cell(
+                row=ALIST_ROW, column=ALIST_COL).value
+            if None != is_list_val and is_list_val.find(SRV_LIST) >= 0:
+                srv_is_list = True
+            if None != is_list_val and is_list_val.find(CLT_LIST) >= 0:
+                clt_is_list = True
+
+        elif OBJECT_FLAG == sheet_val:
             sheeter = ObjectSheet
-            srv_value = wb_sheet.cell( row = OFLG_ROW, column = OSRV_COL ).value
-            clt_value = wb_sheet.cell( row = OFLG_ROW, column = OCLT_COL ).value
-        else :
-            return None
+            srv_value = wb_sheet.cell(row=OFLG_ROW, column=OSRV_COL).value
+            clt_value = wb_sheet.cell(row=OFLG_ROW, column=OCLT_COL).value
+        else:
+            return None, srv_is_list, clt_is_list
 
         # 没有这两个标识就不是配置表。可能是策划的一些备注说明
-        if SRV_FLAG != srv_value or CLT_FLAG != clt_value :
-            return None
-        return sheeter
+        if SRV_FLAG != srv_value or CLT_FLAG != clt_value:
+            return None, srv_is_list, clt_is_list
+        return sheeter, srv_is_list, clt_is_list
 
     def decode(self,srv_path,clt_path,srv_writer,clt_writer):
         color_print.printYellow("    start covert: %s \n" % self.file.ljust(44, "*"))

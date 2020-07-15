@@ -135,8 +135,6 @@ class ErlangerlWriter(Writer):
         start_str = 'getList() ->\n    [\n    '
         end_str = "".join( [start_str, value_list_str, "    ].\n\n"] )
 
-        list_text_list.append( end_str )
-
         # 生成 get_list() 函数
         get_list_fun = []
         keys_len = len(self.keys_list)
@@ -175,10 +173,10 @@ class ErlangerlWriter(Writer):
                     get_list_fun.append(val)
                 no_match_str = "".join('getList(' + ", ".join(underline_list) + ') ->\n    [].\n\n')
                 get_list_fun.append(no_match_str)
-
-
-        value_list = "".join(get_list_fun)
-        list_text_list.append( value_list )
+        if self.is_list == True:
+            value_list = "".join(get_list_fun)
+            list_text_list.append( end_str )
+            list_text_list.append( value_list )
         dict_str = "".join( list_text_list )
 
         return False, dict_str
