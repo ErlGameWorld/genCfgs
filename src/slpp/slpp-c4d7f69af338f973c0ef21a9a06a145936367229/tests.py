@@ -81,8 +81,6 @@ Key: {2}, item: {3}'''.format(value, origin, key, item))
     assert value == origin, '{0} not match original: {1}.'.format(value, origin)
 
 
-
-
 def number_test():
     """
     Integer and float:
@@ -148,6 +146,7 @@ def table_test():
     """
     pass
 
+
 def string_test():
     r"""
     Escape test:
@@ -157,6 +156,7 @@ def string_test():
     >>> assert lua.encode({'a': 'func("call()");'}) == '{\n\ta = "func(\\"call()\\");"\n}'
     """
     pass
+
 
 def basic_test():
     """
@@ -179,4 +179,5 @@ def unicode_test():
 
 if __name__ == '__main__':
     import doctest
+
     doctest.testmod()

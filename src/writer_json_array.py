@@ -1,9 +1,8 @@
 #! python
 # -*- coding:utf-8 -*-
 
-import os
-import sys
 import json
+
 from writer import *
 
 try:
@@ -27,15 +26,13 @@ BASE_LENGTH = 60
 BASE_INDENT = "    "
 INDENT_LIST = {}
 
+
 class JsonarrayWriter(Writer):
     # 文件后缀
     def suffix(self):
         return ".json"
 
     # 文件内容(字符串)
-    def context(self,ctx):
-        return json.dumps(ctx,ensure_ascii=False,\
-            indent=4,sort_keys=True,separators=(',', ':') )
-
-
-
+    def context(self, ctx):
+        return json.dumps(ctx, ensure_ascii=False, \
+                          indent=4, sort_keys=True, separators=(',', ':'))
