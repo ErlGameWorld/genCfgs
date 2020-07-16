@@ -28,7 +28,7 @@ BASE_INDENT = "    "
 INDENT_LIST = {}
 
 class Writer(object):
-    def __init__(self,doc_name,sheet_name, base_name, keys_list, comment_text):
+    def __init__(self,doc_name,sheet_name, base_name, keys_list, comment_text, is_list):
         # 文件名包含中文则需要转unicode
         #self.doc_name   = unicode(doc_name, "utf-8")
         self.doc_name   = doc_name
@@ -36,6 +36,7 @@ class Writer(object):
         self.base_name  = base_name
         self.keys_list   = keys_list
         self.comment_text   = comment_text
+        self.is_list = is_list
 
     # 文件后缀
     def suffix(self):

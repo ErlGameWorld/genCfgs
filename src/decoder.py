@@ -443,11 +443,11 @@ class ExcelDoc:
         wb = openpyxl.load_workbook( self.abspath )
 
         for wb_sheet in wb.worksheets:
-            Sheeter = self.need_decode( wb_sheet )
+            Sheeter, srv_is_list, clt_is_list = self.need_decode( wb_sheet )
             if None == Sheeter :
                 color_print.printPink("        covert skip........... sheet name -> %s\n" % wb_sheet.title)
                 continue
 
-            sheet = Sheeter( base_name,wb_sheet,srv_writer,clt_writer )
+            sheet = Sheeter( base_name,wb_sheet,srv_writer,clt_writer, srv_is_list, clt_is_list )
             if sheet.decode_sheet() :
                 sheet.write_files( srv_path,clt_path )
